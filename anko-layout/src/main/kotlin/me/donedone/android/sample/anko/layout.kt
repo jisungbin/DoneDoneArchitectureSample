@@ -4,40 +4,62 @@ import android.app.Activity
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
+
 
 @AnkoDsl
-interface Widget
+abstract class Layout {
+    abstract val widgets: MutableList<Widget>
+    var layoutOptions: LayoutOptions? = null
 
-@AnkoDsl
-interface Layout {
-    val views: MutableList<Widget>
-    val layoutOption: LayoutOption
+    operator fun Widget.unaryPlus() {
+        this@Layout.widgets += this
+    }
 }
 
-interface LayoutOption {
+interface LayoutOptions {
     val height: Int
     val width: Int
     val align: Int
 }
 
-fun layoutOption(
+fun Layout.layoutOptions(
     height: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
     width: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
     align: Int = Gravity.START,
-): LayoutOption = object : LayoutOption {
-    override val height = height
-    override val width = width
-    override val align = align
-}
-
-operator fun Layout.plusAssign(widget: Widget) {
-    views += widget
-}
-
-fun Activity.verticalLayout(
-    option: LayoutOption,
-    builder: Layout.() -> Unit,
 ) {
-    setContentView(LinearLayout(this).apply(linearLayoutScope))
+    layoutOptions = object : LayoutOptions {
+        override val height = height
+        override val width = width
+        override val align = align
+    }
 }
 
+fun Activity.verticalLayout(builder: Layout.() -> Unit) {
+    val layout = object : Layout() {
+        override val widgets = mutableListOf<Widget>()
+    }.also(builder)
+    val linearLayout = LinearLayout(this).apply {
+        layout.layoutOptions?.let { options ->
+            with(options) {
+                layoutParams = LinearLayout.LayoutParams(width, height)
+                gravity = align
+            }
+        }
+    }
+    for (widget in layout.widgets) {
+        @Suppress("IntroduceWhenSubject")
+        when {
+            widget is Text -> {
+                val textView = TextView(this).apply {
+                    with(widget) {
+                        text = value
+                        setTextColor(color)
+                    }
+                }
+                linearLayout.addView(textView)
+            }
+        }
+    }
+    setContentView(linearLayout)
+}

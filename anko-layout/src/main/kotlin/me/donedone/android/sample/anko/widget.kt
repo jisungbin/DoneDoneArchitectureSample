@@ -1,18 +1,17 @@
+@file:Suppress("UnusedReceiverParameter")
+
 package me.donedone.android.sample.anko
 
 import android.graphics.Color
 
-interface Text : Widget {
-    val value: String
-    val color: Int
-}
+@AnkoDsl
+interface Widget
 
-fun Layout.text(
-    value: String,
-    color: Int = Color.BLACK,
-) {
-    views += object : Text {
-        override val value = value
-        override val color = color
-    }
+class Text internal constructor(
+    var value: String = "",
+    var color: Int = Color.BLACK,
+) : Widget
+
+fun Layout.text(builder: Text.() -> Unit): Widget {
+    return Text().apply(builder)
 }
