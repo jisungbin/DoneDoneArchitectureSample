@@ -1,18 +1,15 @@
 plugins {
-    id 'com.android.application'
+    id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    namespace 'me.donedone.android.sample.achitecture'
+    namespace 'me.donedone.android.sample.anko'
     compileSdk 33
 
     defaultConfig {
-        applicationId "me.donedone.android.sample.achitecture"
         minSdk 23
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
     }
 
     compileOptions {
@@ -27,8 +24,4 @@ android {
     sourceSets {
         main.java.srcDirs += "src/main/kotlin"
     }
-}
-
-dependencies {
-    implementation projects.ankoLayout
 }
