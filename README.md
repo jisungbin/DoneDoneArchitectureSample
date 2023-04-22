@@ -1,0 +1,3 @@
+# DoneDoneArchitectureSample
+
+architecture proposal
