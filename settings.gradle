@@ -9,4 +9,11 @@ pluginManagement {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "DoneDoneArchitectureSample"
-include ':app', ':anko-layout'
+include ':app',
+        ':anko-layout',
+        ':flower',
+        ':network',
+        ':ui:calendar',
+        ':feature:login',
+        ':feature:done:create',
+        ':feature:done:read'
