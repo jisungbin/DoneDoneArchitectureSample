@@ -1,6 +1,8 @@
 plugins {
+    id 'kotlin-kapt'
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -29,9 +31,16 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes true
+}
+
 dependencies {
+    implementation "androidx.appcompat:appcompat:1.6.1" // hilt require AppCompat
     implementation projects.ankoLayout
     implementation projects.ui.calendar
     implementation projects.network
     implementation projects.flower
+    implementation "com.google.dagger:hilt-android:2.44.2"
+    kapt "com.google.dagger:hilt-compiler:2.44.2"
 }
